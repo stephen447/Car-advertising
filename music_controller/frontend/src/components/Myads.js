@@ -58,6 +58,7 @@ export default function Myads(props){
                 </form>
                 <p>{delresp}</p>
             </div>
+            <div className="update"></div>
         </div>
     )
 
