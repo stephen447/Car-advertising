@@ -50,9 +50,9 @@ export default class Advertise extends Component{
                     <h1> Advertise</h1>
                 </Grid>
                 <Grid item>
-                    <form onSubmit={this.handleSubmit}>
-                        <label>Car Manufacturer
-                            <select value={this.state.manufacturer} onChange={this.handleManufChange}>
+                    <form onSubmit={this.handleSubmit} className="form">
+                        <label className="form_label">Car Manufacturer
+                            <select value={this.state.manufacturer} onChange={this.handleManufChange} className="form_input">
                                 <option value="Audi">Audi</option>
                                 <option value="BMW">BMW</option>
                                 <option selected value="Jaguar">Jaguar</option>
@@ -60,14 +60,19 @@ export default class Advertise extends Component{
                             </select>
                         </label>
                         <label>Year
-                            <select value={this.state.year} onChange={this.handleYearChange}>
+                            <select value={this.state.year} onChange={this.handleYearChange} className="form_input">
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option selected value="2022">2022</option>
                                 <option value="2023">2023</option>
                             </select>
                         </label>
-                        <input type="submit" value="Submit" />
+                        <div className="buttons">
+                        <Button variant="contained" to = "/" component={Link} className="back_button">
+                            Back
+                        </Button>
+                        <input type="submit" value="Submit" className="sub_button"/>
+                    </div>
                     </form>
                 </Grid>
                 
