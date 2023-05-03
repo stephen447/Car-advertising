@@ -12,9 +12,17 @@ def generate_unique_code():
     return code
 
 # Create your models here.
-class Room(models.Model):
-    code = models.CharField(max_length=8, default=generate_unique_code, unique=True)
-    host = models.CharField(max_length=50, unique=True)
-    guest_can_pause = models.BooleanField(null=False, default=False)
-    votes_to_skip = models.IntegerField(null=False, default=1)
+class Advert(models.Model):
+    manufacturer = models.CharField(max_length=20, default="Audi")
+    year = models.IntegerField(null=False, default="2020")
+    host = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+    #To be added at later version
+    #price = models.IntegerField(null=False, default="1000")
+    #body = models.CharField(max_length=50, unique=True)
+    #engine_size = models.IntegerField(null=False, default="1")
+    #mileage = models.IntegerField(null=False, default="1000")
+    #doors = models.IntegerField(null=False, default="4")
+    #transmission = models.CharField(max_length=50, unique=True)
+    #description = models.CharField(max_length=200)
+

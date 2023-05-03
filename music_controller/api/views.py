@@ -1,93 +1,71 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import RoomSerializer, CreateRoomSerializer
-from.models import Room
+from .serializers import AdvertSerializer, CreateAdvertSerializer, DeleteAdvertSerializer
+from .models import Advert
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
+import json
 
 # Create your views here.
-class RoomView(generics.ListAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+class Search(generics.ListAPIView):
+    queryset = Advert.objects.all()
+    serializer_class = AdvertSerializer
 
-class CreateRoomView(APIView):
-    serializer_class = CreateRoomSerializer
-
-    def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key): # Current user have an active key?
-                self.request.session.create()
-        
+class CreateAdvertView(APIView):
+    serializer_class = CreateAdvertSerializer
+    def post(self, request, format = None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get('guest_can_pause')
-            votes_to_skip = serializer.data.get('votes_to_skip')
+            manufacturer = serializer.data.get("manufacturer")
+            year = serializer.data.get("year")
             host = self.request.session.session_key
-            queryset = Room.objects.filter(host=host)
-            if queryset.exists():
-                room = queryset[0]
-                room.guest_can_pause = guest_can_pause
-                room.votes_to_skip = votes_to_skip
-                self.request.session['room_code'] = room.code
-                room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
-                return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
-            else:
-                room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
-                self.request.session['room_code'] = room.code
-                room.save()
-                return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
-        
+            advert = Advert(host=host, manufacturer=manufacturer, year=year)
+            advert.save()
+            return Response(AdvertSerializer(advert).data, status=status.HTTP_201_CREATED)
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
-class GetRoom(APIView):
-    serializer_class = RoomSerializer
-    lookup_url_kwarg = 'code'
-
+class DeleteAdvertView(APIView):
+    serializer_class = DeleteAdvertSerializer
     def get(self, request, format=None):
-        code = request.GET.get(self.lookup_url_kwarg)
-        if code != None:
-            room = Room.objects.filter(code=code)
-            if len(room) > 0:
-                data = RoomSerializer(room[0]).data
-                data['is_host'] = self.request.session.session_key == room[0].host
+        #if not self.request.session.exists(self.request.session.session_key):
+        #    self.request.session.create()
+        #serializer = self.serializer_class(data=request.data)
+        #if serializer.is_valid():
+        #    id = serializer.data.get("id")
+        id = request.GET.get('id')
+        ad = Advert.objects.filter(id=id)
+        if len(ad)==1:
+            ad.delete()
+            return Response("Ad "+id+" deleted sucessfully", status=status.HTTP_200_OK)
+        return Response("Ad could not be deleted", status = status.HTTP_200_OK )
+
+
+class SearchAdverts(APIView):
+    serializer_class = CreateAdvertSerializer
+    def get(self, request, format=None):
+        manufacturer = request.GET.get('manufacturer')
+        year = request.GET.get('year')
+        if manufacturer != None:
+            adverts = Advert.objects.filter(manufacturer=manufacturer, year=year)
+            if len(adverts) > 0:
+                data = AdvertSerializer(adverts, many=True).data
                 return Response(data, status=status.HTTP_200_OK)
-            return Response({'Room Not Found': 'Invalid Room Code.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
 
         return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
-class JoinRoom(APIView):
-    lookup_url_kwarg = 'code'
-    def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key): # Current user have an active key?
-                self.request.session.create()
-        code = request.data.get(self.lookup_url_kwarg)
-        if code!=None:
-            room_result = Room.objects.filter(code=code)
-            if(len(room_result)>0):
-                room = room_result[0]
-                self.request.session['room_code'] = code
-                return Response({'message': 'Room Joined!'}, status=status.HTTP_200_OK)
-            return Response({'Bad Request': 'Invalid Room Code'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
-
-class UserInRoom(APIView):
+class MyadsView(APIView):
+    serializer_class = CreateAdvertSerializer
     def get(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
+        host = self.request.session.session_key
+        adverts = Advert.objects.filter(host=host)
+        if len(adverts) > 0:
+            data = AdvertSerializer(adverts, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
+        return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
 
-        data = {
-            'code': self.request.session.get('room_code')
-        }
-        return JsonResponse(data, status=status.HTTP_200_OK)
-
-class LeaveRoom(APIView):
-    def post(self, request, format=None):
-        if 'room_code' in self.request.session:
-            self.request.session.pop('room_code')
-            host_id = self.request.session.session_key
-            room_results = Room.objects.filter(host=host_id)
-            if len(room_results) > 0:
-                room = room_results[0]
-                room.delete()
-
-        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)

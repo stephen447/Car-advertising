@@ -2,7 +2,9 @@ html, body{
     height: 100%;
     margin: 0;
     padding: 0;
-
+    background-color: rgb(75, 117, 140);
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
 #main{
@@ -25,3 +27,50 @@ html, body{
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.form_input {
+    margin: 5px;
+    padding: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: white;
+    text-align: center;
+    outline: 0px;
+    outline-color: invert;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.sub_button{
+    background-color: rgb(165, 0, 165);
+    color: white;
+    border-radius: 10px;
+    border-width: 0px;
+    font-size: 16px;
+    padding: 10px;
+    align-self: center;
+    margin: 5px;
+}
+.sub_button:hover{
+    background-color: rgb(109, 1, 109);
+    
+}
+
+.back_button{
+    border-radius: 10px;
+    padding: 10px;
+    align-self: center;
+    font-size: 16px;
+    background-color: white;
+}
+
+.form_label {
+    margin: 5px;
+    font-size: 16px;
+}
+
+.buttons{
+    margin: 15px;
+}
+
+
+
+

@@ -1,12 +1,18 @@
 from rest_framework import serializers
-from .models import Room
+from .models import Advert
 
-class RoomSerializer(serializers.ModelSerializer):
+class AdvertSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Room
-        fields = ('id', 'code', 'host', 'guest_can_pause', 'votes_to_skip', 'created_at')
+        model = Advert
+        fields = ('id', 'manufacturer', 'year', 'created_at', 'host')
 
-class CreateRoomSerializer(serializers.ModelSerializer):
+class CreateAdvertSerializer(serializers.ModelSerializer):
+    many=True
     class Meta:
-        model = Room
-        fields = ('guest_can_pause', 'votes_to_skip' )
+        model = Advert
+        fields = ('manufacturer', 'year')
+
+class DeleteAdvertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advert
+        fields = ('id')

@@ -1,0 +1,15 @@
+class SearchAdverts(APIView):
+    serializer_class = CreateAdvertSerializer
+    lookup_url_kwarg = 'manufacturer'
+    def get(self, request, format=None):
+        manufacturer = request.GET.get('manufacturer')
+        if manufacturer != None:
+            #adverts = Advert.objects.filter(manufacturer=manufacturer)
+            adverts = Advert.objects.all().values('manufacturer', 'year')
+            adverts = json.dumps(list(adverts))
+            if len(adverts) > 0:
+                #data = AdvertSerializer(adverts[0]).data
+                return JsonResponse({"ad":adverts},safe=False, status=status.HTTP_200_OK)
+            return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
+
+        return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
