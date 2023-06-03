@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "music_controller"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 Django = "^4.1.6"
 
 
