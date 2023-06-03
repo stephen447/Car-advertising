@@ -10,8 +10,6 @@ packages = [{include = "music_controller"}]
 python = "^3.9"
 Django = "^4.1.6"
 
-[tool.poetry.group.dev.dependencies]
-Django = "^4.1.6"
 
 [build-system]
 requires = ["poetry-core"]
