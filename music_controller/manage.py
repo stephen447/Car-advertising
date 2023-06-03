@@ -2,7 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import dj_database_url
 
 
 def main():
