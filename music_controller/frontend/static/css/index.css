@@ -69,6 +69,11 @@ html, body{
 
 .buttons{
     margin: 15px;
+    padding: 10px;
+}
+.home_buttons{
+    margin: 10px;
+    padding: 10px;
 }
 
 

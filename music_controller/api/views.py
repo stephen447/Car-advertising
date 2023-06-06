@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
 from rest_framework import generics, status
 from .serializers import AdvertSerializer, CreateAdvertSerializer, DeleteAdvertSerializer
 from .models import Advert
@@ -68,4 +71,8 @@ class MyadsView(APIView):
             data = AdvertSerializer(adverts, many=True).data
             return Response(data, status=status.HTTP_200_OK)
         return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
+
+class UserView(APIView):
+    def register(self, request, format=None):
+        return None
 
