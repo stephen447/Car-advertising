@@ -1,64 +1,78 @@
 import React, { Component } from "react"
 import {useState } from "react";
-import { render } from "react-dom"
 import {BrowserRouter as Router, Switch, Route, Routes, Link, Redirect, Navigate} from "react-router-dom"
-import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
+import {Button, } from "@mui/material";
 
 
 export default function Myads(props){
     
     const [resp, setResp] = useState([])
     const [delresp, setDelResp] = useState([])
-    const [delID, setDelID] = useState(0)
 
     const handleSubmit = (e) => {
         /* Send fetch request to API endpoint in the backend from here*/
         e.preventDefault()
         
-        fetch("/api/myads?id=8")
+        fetch("/api/myads")
           .then((response) => response.json())
           .then((data)=> setResp(data))  
     }
 
-    const handleDelete = (e) => {
-        e.preventDefault()
+    const handleDelete = (event, delID) => {
+        event.preventDefault()
         fetch("/api/delete?id="+delID)
           .then((response) => response.json())
           .then((data) => setDelResp(data));
+          console.log(delresp)
     }
 
     return( 
-        <div>
+        <div className="body">
             <div>
-            <h1>My Ads</h1>
-            <Button variant="contained" onClick={handleSubmit}>Fetch My Ads</Button>
-            <Button variant="contained" to = "/" component={Link} className="back_button">Back</Button>
+            <h1 className="title">My Ads</h1>
             </div>
-            <div>
+            <div className="back_buttons">
+                <Button variant="contained" onClick={handleSubmit}>Fetch My Ads</Button>
+                <Button variant="contained" to = "/" component={Link} className="back_button">Back</Button>
+            </div>
+            <div className="wrapper">
                 {resp.length>0&& 
-                    <div>
-                        <h2>Results</h2>
-                        {Object.values(resp).map(value =>
-                            <div>
-                                <p>{value.manufacturer}</p>
-                                <p>{value.year}</p>
-                                <p>{value.id}</p>
-                            </div>   
-                                )}
-                    </div>
-                }
+                        <div>
+                            {Object.values(resp).map(value =>
+                                <div className="advert">
+                                    <div className="row">
+                                        <div className="column">
+                                            <h2>{value.manufacturer}</h2>
+                                        </div>
+                                        <div className="column">
+                                            <h2>€ {value.price}</h2>
+                                        </div>
+                                    </div>
+                                    <div className="picture">
+                                        <img src={value.image} className="image" ></img>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <p><b>Year: </b>{value.year}</p>
+                                            <p><b>Mileage: </b>{value.mileage} Km</p>
+                                            <p><b>Transmission: </b>{value.transmission}</p>
+                                            <p><b>Location: </b>{value.location}</p>
+                                        </div>
+                                        <div className="column">
+                                            <p><b>Colour: </b>{value.colour}</p>   
+                                            <p><b>Doors: </b>{value.doors}</p> 
+                                            <p><b>Engine: </b>{value.engine} L</p>
+                                            <p><b>Fuel: </b>{value.fuel}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                    <Button variant="contained" onClick={(event) => handleDelete(event,value.id)}>Delete</Button>
+                                    </div>                                        
+                                </div>   
+                            )}
+                        </div>
+                    }
             </div>
-            <div>
-                <form  className="form" onSubmit={handleDelete} >
-                    <label>
-                        Delete
-                        <input type="number" onChange={(e)=>setDelID(e.target.value)} className="form_input"/>
-                    </label>
-                    <input type="submit" value="Submit" className="sub_button"/>
-                </form>
-                <p>{delresp}</p>
-            </div>
-            <div className="update"></div>
         </div>
     )
 

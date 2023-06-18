@@ -3,9 +3,6 @@ import {useState, useEffect } from "react";
 import { render } from "react-dom"
 import {BrowserRouter as Router, Switch, Route, Routes, Link, Redirect, Navigate} from "react-router-dom"
 import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
-import { redirect } from "react-router-dom";
-import Form from "react-bootstrap/Form";
-
 
 
 export default function User(props){
@@ -70,16 +67,20 @@ export default function User(props){
     if(LoggedIn==true){
         return(
             <div>
-                <h1>My profile</h1>
-                <h2>Username: {details.username}</h2>
-                <h2>Email: {details.email}</h2>
-                <Button variant="contained" to = "/" component={Link} className="back_button">
-                    Back
-                </Button>
-                <Button variant="contained" color="secondary" type="submit" onClick={handleLogout}>
-                    Logout
-                </Button>
-            </div>          
+                <div className="title">
+                    <h1>My profile</h1>
+                </div>
+                <div className='user_details'>
+                    <h2>Username: {details.username}</h2>
+                    <h2>Email: {details.email}</h2>
+                    <Button variant="contained" to = "/" component={Link} className="back_button">
+                        Back
+                    </Button>
+                    <Button variant="contained" color="secondary" type="submit" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </div>      
+            </div>
         )
     }
     else{

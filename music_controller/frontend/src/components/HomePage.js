@@ -1,6 +1,5 @@
 import React, { Component } from "react"
-import { render } from "react-dom"
-import {BrowserRouter as Router, Switch, Route, Routes, Link, Redirect, Navigate} from "react-router-dom"
+import {BrowserRouter as Router, Route, Routes, Link} from "react-router-dom"
 import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
 import Search from "./Search";
 import Advertise from "./Advertise";
@@ -17,39 +16,36 @@ export default class HomePage extends Component{
 
     renderHomePage() {
       return (
-        <Grid>
-          <Grid item xs={12} align="center" >
-            <Typography variant="h2" className="home_heading">
+        <Grid className="body">
+          <Grid item xs={12} align="center" className="title">
+            <Typography variant="h2">
               Sell your car
             </Typography>
           </Grid>
-          <Grid item xs={12} align="center" className="home_buttons">
-            <ButtonGroup className="home_buttons">
-              <Button variant="contained" color="primary" to="/search" component={Link}>
+          <Grid item align="center" className="home_buttons">
+            <ButtonGroup>
+              <Button variant="contained" color="secondary" to="/search" component={Link} className="button">
                 Search
               </Button>
-              <Button variant="contained" color="secondary" to = "/advertise" component={Link}>
+              <Button variant="contained" color="secondary" to = "/advertise" component={Link} className="button">
                 Advertise
               </Button>
-              <Button variant="contained" color="primary" to = "/myads" component={Link}>
+              <Button variant="contained" color="secondary" to = "/myads" component={Link} className="button">
                 My ads
               </Button>
             </ButtonGroup>
           </Grid>
-          <Grid item xs={12} align="center" className="home_buttons">
-              <Button variant="contained" color="primary" to="/login" component={Link} className="buttons">
+          <Grid item align="center" className="home_buttons">
+              <Button variant="contained" color="primary" to="/login" component={Link} className="button">
                 Login
               </Button>
-              <Button variant="contained" color="primary" to="/register" component={Link} className="buttons">
+              <Button variant="contained" color="primary" to="/register" component={Link} className="button">
                 Register
               </Button>
-              <Button variant="contained" color="primary" to="/user" component={Link} className="buttons">
+              <Button variant="contained" color="primary" to="/user" component={Link} className="button">
                 My Profile
               </Button>
           </Grid>
-          
-          
-          
         </Grid>
         )
       }

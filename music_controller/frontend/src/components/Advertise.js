@@ -2,6 +2,8 @@ import React, { Component, useState, useEffect } from "react"
 import { render } from "react-dom"
 import {BrowserRouter as Router, Switch, Route, Routes, Link, Redirect, Navigate} from "react-router-dom"
 import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
+import axios from 'axios';
+import { color } from "@mui/system";
 
 
 export default function Advertise(props){
@@ -18,6 +20,7 @@ export default function Advertise(props){
     const [Description, setDescription] = useState("Default");
     const [Price, setPrice] = useState(0);
     const [LoggedOut, setLoggedOut] = useState(false);
+    const [file, setFile] = useState();
     useEffect(() => {logged_in()});
 
     const Manuf = ["Audi","Aston Martin", "Bentley", "BMW", "Citreon", "Dacia", "Ferrari", "Honda", "Hyundai", "Jaguar", "Lamborghini","Land Rover", "Lexus", "Maserati", "Mclaren", "Mercedes-Benz", "Porsche","Rolls Royce", "Seat", "Skoda", "Subaru","Tesla", "Toyota", "Volkswagen"];
@@ -38,17 +41,17 @@ export default function Advertise(props){
         }
         return cookieValue;
     }
-
+    /*
     function handleSubmit(event) {
         /* Send fetch request to API endpoint in the backend from here*/
         /*console.log(this.state.manufacturer)
-        console.log(this.state.year)*/
+        console.log(this.state.year)
         event.preventDefault();
         var csrftoken = getCookie('csrftoken');
-
+        console.log("file: :", file)
         const requestOptions = {
             method: 'POST',
-            headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken},
+            headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken, enctype:'multipart/form-data'},
             body: JSON.stringify({
               manufacturer: Manufacturer,
               year: Year,
@@ -61,6 +64,7 @@ export default function Advertise(props){
               doors: Doors,
               description: Description,
               price: Price,
+              image: file
             }),
           };
         fetch("/api/advertise", requestOptions)
@@ -68,6 +72,28 @@ export default function Advertise(props){
           .then((data) => console.log(data));
         //console.log(Description)
         //console.log(Manufacturer)
+    }*/
+
+    function handleSubmit(event){
+        event.preventDefault();
+        var csrftoken = getCookie('csrftoken');
+        let formdata = new FormData();
+        formdata.append('manufacturer', Manufacturer)
+        formdata.append('year', Year)
+        formdata.append('engine', Engine)
+        formdata.append('mileage', Mileage)
+        formdata.append('location', Location)
+        formdata.append('fuel', Fuel)
+        formdata.append('transmission', Transmission)
+        formdata.append('colour', Colour)
+        formdata.append('doors', Doors)
+        formdata.append('description', Description)
+        formdata.append('price', Price)
+        formdata.append('image', file, file.name)
+    
+        axios.post("/api/advertise", formdata, {
+            headers: {'content-type': 'multipart/form-data', 'X-CSRFToken': csrftoken}
+        }).then((response) => console.log(response.data));
     }
     
     function logged_in(){
@@ -171,6 +197,9 @@ export default function Advertise(props){
                             <label>Description
                             <textarea onChange={(e) => setDescription(e.target.value)} className="form_input"></textarea>
                             </label>
+                        </div>
+                        <div>
+                            <input type="file" className="file_upload" accept="image/png, image/jpeg" onChange={(e) => setFile(e.target.files[0])}/>
                         </div>
     
     

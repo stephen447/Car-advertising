@@ -9,11 +9,9 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 import json
 from rest_framework.authtoken.models import Token
+import PIL
 
 # Create your views here.
-class Search(generics.ListAPIView):
-    queryset = Advert.objects.all()
-    serializer_class = AdvertSerializer
 
 class AdvertView(APIView):
     serializer_class = CreateAdvertSerializer
@@ -34,12 +32,13 @@ class AdvertView(APIView):
             colour = serializer.data.get("colour")
             doors = serializer.data.get("doors")
             description = serializer.data.get("description")
-
+            image = request.FILES['image']
+            print("image: ", image)
             if request.user.is_authenticated:
                 un = request.user.username
 
             host = self.request.session.session_key
-            advert = Advert(username=un, manufacturer=manufacturer, year=year, engine=engine, mileage=mileage, location=location, fuel=fuel, transmission=transmission, colour=colour, doors=doors, description=description, price=pr)
+            advert = Advert(username=un, manufacturer=manufacturer, year=year, engine=engine, mileage=mileage, location=location, fuel=fuel, transmission=transmission, colour=colour, doors=doors, description=description, price=pr, image=image)
             advert.save()
             return Response(AdvertSerializer(advert).data, status=status.HTTP_201_CREATED)
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
@@ -52,59 +51,27 @@ class AdvertView(APIView):
         minprice = request.GET.get('minprice')
         transmission = request.GET.get('transmission')
         maxmileage = request.GET.get('maxmileage')
+        sortby = request.GET.get('sortby')
         adverts = Advert.objects.filter(manufacturer=manufacturer, year__lte=maxyear, year__gt=minyear, price__lte=maxprice,
-        price__gt=minprice, transmission=transmission, mileage__lte=maxmileage)
+        price__gt=minprice, transmission=transmission, mileage__lte=maxmileage).order_by(sortby)
+        #adverts=Advert.objects.all()
+        #adverts = Advert.objects.filter(manufacturer=manufacturer)
+        print("hello")
         if len(adverts) > 0:
-                data = AdvertSerializer(adverts, many=True).data
-                return Response(data, status=status.HTTP_200_OK)
+            print("hello loop1")
+            data = AdvertSerializer(adverts, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
         return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
-
-        
-
-
-
-
-
-
 
 class DeleteAdvertView(APIView):
     serializer_class = DeleteAdvertSerializer
     def get(self, request, format=None):
-        #if not self.request.session.exists(self.request.session.session_key):
-        #    self.request.session.create()
-        #serializer = self.serializer_class(data=request.data)
-        #if serializer.is_valid():
-        #    id = serializer.data.get("id")
         id = request.GET.get('id')
         ad = Advert.objects.filter(id=id)
         if len(ad)==1:
             ad.delete()
             return Response("Ad "+id+" deleted sucessfully", status=status.HTTP_200_OK)
         return Response("Ad could not be deleted", status = status.HTTP_200_OK )
-
-
-class SearchAdverts(APIView):
-    def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-        serializer = SearchAdvertSerializer(data=request.data)
-        if serializer.is_valid():
-            manufacturer = serializer.data.get("manufacturer")
-            maxyear = serializer.data.get("maxyear")
-            minyear = serializer.data.get("minyear")
-            maxprice = serializer.data.get("maxprice")
-            minprice = serializer.data.get("minprice")
-            transmission = serializer.data.get("transmission")
-            maxmileage = serializer.data.get("maxmileage") 
-            adverts = Advert.objects.filter(manufacturer=manufacturer, year__lt=maxyear)# year__gte=minyear,
-            #price__gte=minprice, price__lt=maxprice, transmission=transmission, mileage__lte=maxmileage)
-            if len(adverts) > 0:
-                data = AdvertSerializer(adverts, many=True).data
-                return Response(data, status=status.HTTP_200_OK)
-            return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
-
-        return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class MyadsView(APIView):
     serializer_class = CreateAdvertSerializer
@@ -113,10 +80,15 @@ class MyadsView(APIView):
             self.request.session.create()
         host = self.request.session.session_key
         adverts = Advert.objects.filter(host=host)
-        if len(adverts) > 0:
-            data = AdvertSerializer(adverts, many=True).data
-            return Response(data, status=status.HTTP_200_OK)
-        return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
+        if request.user.is_authenticated:
+            un = request.user.username
+            adverts = Advert.objects.filter(username=un)
+            if len(adverts) > 0:
+                data = AdvertSerializer(adverts, many=True).data
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)
+        return Response({"Please login"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UserCreate(APIView):
     def post(self, request, format = 'json'):

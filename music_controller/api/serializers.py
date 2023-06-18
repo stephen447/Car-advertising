@@ -4,15 +4,17 @@ from .models import Advert
 from django.contrib.auth.models import User
 
 class AdvertSerializer(serializers.ModelSerializer):
+    #image = serializers.ImageField(required=False)
     class Meta:
         model = Advert
-        fields = ('id', 'manufacturer', 'year', 'username', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price')
+        fields = ('id', 'manufacturer', 'year', 'username', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image')
 
 class CreateAdvertSerializer(serializers.ModelSerializer):
+    #image = serializers.ImageField(required=False)
     many=True
     class Meta:
         model = Advert
-        fields = ('id', 'manufacturer', 'year', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price')
+        fields = ('id', 'manufacturer', 'year', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image')
 
 class SearchAdvertSerializer(serializers.Serializer):
     class Meta:

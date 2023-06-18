@@ -1,26 +1,19 @@
 import React, { Component } from "react"
 import {useState } from "react";
-import { render } from "react-dom"
-import InfiniteScroll from "react-infinite-scroller"
-import {BrowserRouter as Router, Switch, Route, Routes, Link, Redirect, Navigate} from "react-router-dom"
-import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
+import {BrowserRouter as Router, Switch, Route, Routes, Link} from "react-router-dom"
+import { Grid, Button } from "@mui/material";
 
 
 export default function Search(props){
     const [resp, setResp] = useState([])
-
     const [Manufacturer, setManufacturer] = useState("Audi");
-    
     const [MaxYear, setMaxYear] = useState(2023);
     const [MinYear, setMinYear] = useState(1960);
     const [MinPrice, setMinPrice] = useState(0);
     const [MaxPrice, setMaxPrice] = useState(999999);
     const [MaxMileage, setMaxMileage] = useState(999999);
     const [Transmission, setTransmission] = useState("Manual");
-
-
-
-
+    const [SortBy, setSortBy]=useState("-price")
 
     const [Model, setModel] = useState("A1");
     const [Engine, setEngine] = useState(1.0);
@@ -47,54 +40,24 @@ export default function Search(props){
         }
         return cookieValue;
     }
-/*
-    const handleSubmit = (e) => {
-        /* Send fetch request to API endpoint in the backend from here*/
-        /*console.log(manufacturer)
-        console.log(manufacturer)
-        e.preventDefault()
-        var csrftoken = getCookie('csrftoken');
-        const requestOptions = {
-            method: 'POST',
-            headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken},
-            body: JSON.stringify({
-                manufacturer: Manufacturer,
-                maxyear: MaxYear,
-                minyear: MinYear,
-                mileage: MaxMileage,
-                transmission: Transmission,
-                maxprice: MaxPrice,
-                minprice: MinPrice,
-              }),
-        };
-
-        fetch("/api/search", requestOptions)
-          .then((response) => response.json())
-          /*.then((data) => console.log("A "+data.manufacturer+" was found!"))
-          .then((data)=> setResp(data))
-        console.log(resp)
-          
-      }
-    */
 
       const handleSubmit = (e) =>{
         e.preventDefault()
         var csrftoken = getCookie('csrftoken');
-        console.log('Submitting')
-        console.log("Max year:", MaxYear)
+
         const requestOptions = {
             method: 'GET',
             headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken},  
-          };
+        };
+
         fetch("/api/advertise?manufacturer="+Manufacturer+"&maxyear="+MaxYear+"&minyear="+MinYear
-        +"&maxprice="+MaxPrice+"&minprice="+MinPrice+"&maxmileage="+MaxMileage+"&transmission="+Transmission, requestOptions)
+        +"&maxprice="+MaxPrice+"&minprice="+MinPrice+"&maxmileage="+MaxMileage+"&transmission="+Transmission+"&sortby="+SortBy, requestOptions)
           .then((response) => response.json())
           .then((data) => setResp(data));
-          //console.log(resp)
       }
 
     return(
-        <Grid>
+        <Grid className="body">
             <Grid item className="title">
                 <h1>Search</h1>
             </Grid>
@@ -140,6 +103,16 @@ export default function Search(props){
                         <input value={MaxMileage} onChange={(e) => setMaxMileage(e.target.value)} className="form_input" name="MaxMileage" max="999999" min="0" type={"number"}required></input>
                         </label>
                     </div>
+                    <div>
+                        <label className="form_label" >Sort by
+                        <select value={SortBy} onChange={(e) => setSortBy(e.target.value)} className="form_input" name="SortBy">
+                            <option value="-price">Highest Price</option>
+                            <option value="price">Lowest Price</option>
+                            <option value="mileage">Lowest Mileage</option>
+                            <option value="-year">Newest</option>
+                        </select>
+                        </label>
+                    </div>
                     
                     <div className="buttons">
                         <Button variant="contained" to = "/" component={Link} className="back_button">
@@ -162,8 +135,8 @@ export default function Search(props){
                                             <h2>€ {value.price}</h2>
                                         </div>
                                     </div>
-                                    <div className="picture">
-                                        <p>Placeholder for pictures</p>
+                                    <div>
+                                        <img src={value.image} className="image" ></img>
                                     </div>
                                     <div className="row">
                                         <div className="column">
@@ -179,11 +152,10 @@ export default function Search(props){
                                             <p><b>Fuel: </b>{value.fuel}</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className="description">
                                         <h2>Description</h2>
                                         <p>{value.description}</p>
-                                    </div>
-                                        
+                                    </div>                                       
                                 </div>   
                             )}
                         </div>
@@ -195,99 +167,3 @@ export default function Search(props){
 
 }
 
-/*
-<div>
-                        
-                        {Object.values(resp).map(value => 
-                            <div>
-                                <p>{value.manufacturer}</p>
-                                
-                            </div>
-                        )} 
-                    </div>
-
-
-
-
-export default class Search extends Component{
-    constructor(props){
-        super(props)
-        this.state={
-            manufacturer: 'Audi',
-            year: '2020',
-            m: [0]
-        }
-        this.handleManufChange = this.handleManufChange.bind(this);
-        this.handleYearChange = this.handleYearChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleManufChange(e) {
-        /*console.log(this.state.manufacturer),*
-        this.setState({manufacturer: e.target.value})
-        
-    }
-    handleYearChange(e) {
-        /*console.log(this.state.year),*
-        this.setState({year: e.target.value})
-        
-    }
-
-    handleSubmit(e) {
-        /* Send fetch request to API endpoint in the backend from here*
-        /*console.log(this.state.manufacturer)
-        console.log(this.state.year)*
-        e.preventDefault()
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              manufacturer: this.state.manufacturer,
-              year: this.state.year
-            })
-          };
-        fetch("/api/search?manufacturer="+this.state.manufacturer)
-          .then((response) => response.json())
-          /*.then((data) => console.log("A "+data.manufacturer+" was found!"))*
-          .then((data)=> this.setState({m: data}))
-          
-      }
-    
-    render(){
-        return(
-            <Grid>
-                <Grid item className="title">
-                    <h1> Search</h1>
-                    <h1> {this.state.m}</h1>
-                </Grid>
-
-                <Grid item>
-                    <form onSubmit={this.handleSubmit} className="form">
-                        <label className="form_label" >Manufacturer</label>
-                        <select value={this.state.manufacturer} onChange={this.handleManufChange} className="form_input">
-                            <option value="Audi">Audi</option>
-                            <option value="BMW">BMW</option>
-                            <option selected value="Jaguar">Jaguar</option>
-                            <option value="Mercedes-Benz">Mercedes-Benz</option>
-                        </select>
-                        
-                        <label className="form_label">Year</label>
-                        <select value={this.state.year} onChange={this.handleYearChange} className="form_input" name="Year">
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option selected value="2022">2022</option>
-                            <option value="2023">2023</option>
-                        </select>
-                        <div className="buttons">
-                            <Button variant="contained" to = "/" component={Link} className="back_button">
-                                Back
-                            </Button>
-
-                            <input type="submit" value="Submit" className="sub_button"/>
-                        </div>  
-                    </form>
-                </Grid>
-            </Grid>
-        )
-    }
-}*/

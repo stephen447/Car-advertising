@@ -1,5 +1,6 @@
 html, body{
     height: 100%;
+    width: 150%;
     margin: 0;
     padding: 0;
     background-color: rgb(75, 117, 140);
@@ -27,7 +28,24 @@ html, body{
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
+.button{
+    width: 120px;
+    padding: 20px;
+}
+.home_buttons{
+    padding: 15px;
+}
+.title{
+    padding: 15px;
+    text-align: center;
+}
+.form_label{
+    display: inline-block;
+    font-size: 16px;
+    width: 120px;
+    text-align: center;
+    padding: 10px;
+}
 .form_input {
     margin: 5px;
     padding: 2px;
@@ -38,6 +56,16 @@ html, body{
     outline-color: invert;
     border-radius: 10px;
     font-size: 16px;
+    width: 80px;
+}
+.file_upload{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    margin: 5px;
+}
+.form{ 
+    text-align: center;
 }
 .sub_button{
     background-color: rgb(165, 0, 165);
@@ -61,20 +89,6 @@ html, body{
     font-size: 16px;
     background-color: white;
 }
-
-.form_label {
-    margin: 5px;
-    font-size: 16px;
-}
-
-.buttons{
-    margin: 15px;
-    padding: 10px;
-}
-.home_buttons{
-    margin: 10px;
-    padding: 10px;
-}
 .advert{
     background-color: hsla(0, 0%, 100%, 0.65);
     margin: 10px;
@@ -91,6 +105,8 @@ html, body{
     scroll-behavior: smooth;
     overflow-y: scroll;
     height: 400px;
+    width: 600px;
+    padding: 10px;
 }
 .row{
     display: flex;
@@ -98,6 +114,22 @@ html, body{
 .column{
     flex: 50%;
 }
-
+.image{
+    width: 100%;
+    border-radius: 10px;
+}
+.back_buttons{
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+.user_details{
+    background-color: rgb(96, 150, 179);
+    margin: 10px;
+    border-radius: 10px;
+    padding: 20px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
 
 
