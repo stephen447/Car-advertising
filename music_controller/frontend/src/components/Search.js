@@ -26,6 +26,11 @@ export default function Search(props){
     const Manuf = ["Audi","Aston Martin", "Bentley", "BMW", "Citreon", "Dacia", "Ferrari", "Honda", "Hyundai", "Jaguar", "Lamborghini","Land Rover", "Lexus", "Maserati", "Mclaren", "Mercedes-Benz", "Porsche","Rolls Royce", "Seat", "Skoda", "Subaru","Tesla", "Toyota", "Volkswagen"];
     let makes = Manuf.map((make, i) => {return (<option value={make}>{make}</option>)})
     
+    function validateForm() {
+
+        return MinPrice<=MaxPrice && MinYear<=MaxYear;
+    
+    }
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -118,7 +123,9 @@ export default function Search(props){
                         <Button variant="contained" to = "/" component={Link} className="back_button">
                             Back
                         </Button>
-                        <input type="submit" value="Submit" className="sub_button"/>
+                        <Button variant="contained" onClick={handleSubmit} color="secondary" disabled={!validateForm()}  >
+                            Submit
+                        </Button>
                     </div>   
                 </form>
                 <div className="wrapper">
