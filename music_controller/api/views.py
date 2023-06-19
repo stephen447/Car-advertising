@@ -53,12 +53,10 @@ class AdvertView(APIView):
         maxmileage = request.GET.get('maxmileage')
         sortby = request.GET.get('sortby')
         adverts = Advert.objects.filter(manufacturer=manufacturer, year__lte=maxyear, year__gt=minyear, price__lte=maxprice,
-        price__gt=minprice, transmission=transmission, mileage__lte=maxmileage).order_by(sortby)
-        #adverts=Advert.objects.all()
+        price__gte=minprice, transmission=transmission, mileage__lte=maxmileage).order_by(sortby)
+        
         #adverts = Advert.objects.filter(manufacturer=manufacturer)
-        print("hello")
         if len(adverts) > 0:
-            print("hello loop1")
             data = AdvertSerializer(adverts, many=True).data
             return Response(data, status=status.HTTP_200_OK)
         return Response({'No adverts found for given manufacturer'}, status=status.HTTP_200_OK)

@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import {useState } from "react";
+import { Carousel } from "react-responsive-carousel";
 import {BrowserRouter as Router, Switch, Route, Routes, Link} from "react-router-dom"
 import { Grid, Button } from "@mui/material";
 
@@ -59,6 +60,7 @@ export default function Search(props){
         +"&maxprice="+MaxPrice+"&minprice="+MinPrice+"&maxmileage="+MaxMileage+"&transmission="+Transmission+"&sortby="+SortBy, requestOptions)
           .then((response) => response.json())
           .then((data) => setResp(data));
+          console.log("Response:", resp)
       }
 
     return(
@@ -142,7 +144,7 @@ export default function Search(props){
                                             <h2>€ {value.price}</h2>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className="picture">
                                         <img src={value.image} className="image" ></img>
                                     </div>
                                     <div className="row">
