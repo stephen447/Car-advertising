@@ -32,13 +32,16 @@ class AdvertView(APIView):
             colour = serializer.data.get("colour")
             doors = serializer.data.get("doors")
             description = serializer.data.get("description")
-            image = request.FILES['image']
-            print("image: ", image)
+            im1 = request.FILES['image1']
+            im2 = request.FILES['image2']
+            im3 = request.FILES['image3']
+            im4 = request.FILES['image4']
+            im5 = request.FILES['image5']
             if request.user.is_authenticated:
                 un = request.user.username
 
             host = self.request.session.session_key
-            advert = Advert(username=un, manufacturer=manufacturer, year=year, engine=engine, mileage=mileage, location=location, fuel=fuel, transmission=transmission, colour=colour, doors=doors, description=description, price=pr, image=image)
+            advert = Advert(username=un, manufacturer=manufacturer, year=year, engine=engine, mileage=mileage, location=location, fuel=fuel, transmission=transmission, colour=colour, doors=doors, description=description, price=pr, image1=im1, image2=im2, image3=im3, image4=im4, image5=im5)
             advert.save()
             return Response(AdvertSerializer(advert).data, status=status.HTTP_201_CREATED)
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)

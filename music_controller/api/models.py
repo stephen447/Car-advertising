@@ -13,7 +13,11 @@ class Advert(models.Model):
     host = models.CharField(max_length=50)
     #created_at = models.DateTimeField(auto_now_add=True)
     #To be added at later version
-    image = models.ImageField(null = True, blank=True, upload_to="images/")
+    image1 = models.ImageField(null = True, blank=True, upload_to="images/")
+    image2 = models.ImageField(null = True, blank=True, upload_to="images/")
+    image3 = models.ImageField(null = True, blank=True, upload_to="images/")
+    image4 = models.ImageField(null = True, blank=True, upload_to="images/")
+    image5 = models.ImageField(null = True, blank=True, upload_to="images/")
     price = models.IntegerField(null=False, default="0")
     engine = models.IntegerField(null=False, default="1")
     mileage = models.IntegerField(null=False, default="1000")

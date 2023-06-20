@@ -7,14 +7,14 @@ class AdvertSerializer(serializers.ModelSerializer):
     #image = serializers.ImageField(required=False)
     class Meta:
         model = Advert
-        fields = ('id', 'manufacturer', 'year', 'username', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image')
+        fields = ('id', 'manufacturer', 'year', 'username', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image1', 'image2', "image3", "image4", "image5")
 
 class CreateAdvertSerializer(serializers.ModelSerializer):
     #image = serializers.ImageField(required=False)
     many=True
     class Meta:
         model = Advert
-        fields = ('id', 'manufacturer', 'year', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image')
+        fields = ('id', 'manufacturer', 'year', 'engine', 'mileage', 'location', 'fuel', 'transmission', 'colour', 'doors', 'description', 'price', 'image1', 'image2', "image3", "image4", "image5")
 
 class SearchAdvertSerializer(serializers.Serializer):
     class Meta:

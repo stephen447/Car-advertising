@@ -150,12 +150,24 @@ export default function Search(props){
                                         <div className="box">
                                             <Carousel useKeyboardArrows={true}>
                                                 <div>
-                                                    <img alt="" src={value.image} />
-                                                    <p className="legend">Legend 1</p>
+                                                    <img alt="" src={value.image1} />
+                                                    <p className="legend">{value.manufacturer}</p>
                                                 </div>
                                                 <div>
-                                                    <img alt="" src={value.image} />
-                                                    <p className="legend">Legend 1</p>
+                                                    <img alt="" src={value.image2} />
+                                                    <p className="legend">{value.manufacturer}</p>
+                                                </div>
+                                                <div>
+                                                    <img alt="" src={value.image3} />
+                                                    <p className="legend">{value.manufacturer}</p>
+                                                </div>
+                                                <div>
+                                                    <img alt="" src={value.image4} />
+                                                    <p className="legend">{value.manufacturer}</p>
+                                                </div>
+                                                <div>
+                                                    <img alt="" src={value.image5} />
+                                                    <p className="legend">{value.manufacturer}</p>
                                                 </div>
                                             </Carousel>
                                         </div>
