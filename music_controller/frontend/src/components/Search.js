@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import {useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {BrowserRouter as Router, Switch, Route, Routes, Link} from "react-router-dom"
 import { Grid, Button } from "@mui/material";
 
@@ -26,7 +27,7 @@ export default function Search(props){
 
     const Manuf = ["Audi","Aston Martin", "Bentley", "BMW", "Citreon", "Dacia", "Ferrari", "Honda", "Hyundai", "Jaguar", "Lamborghini","Land Rover", "Lexus", "Maserati", "Mclaren", "Mercedes-Benz", "Porsche","Rolls Royce", "Seat", "Skoda", "Subaru","Tesla", "Toyota", "Volkswagen"];
     let makes = Manuf.map((make, i) => {return (<option value={make}>{make}</option>)})
-    
+    const images = ["/media/images/e14aa58e-bc49-4c62-898a-c8a5065e93f7_iVsTpxS.JPG", "/media/images/e14aa58e-bc49-4c62-898a-c8a5065e93f7_iVsTpxS.JPG"]
     function validateForm() {
 
         return MinPrice<=MaxPrice && MinYear<=MaxYear;
@@ -145,7 +146,19 @@ export default function Search(props){
                                         </div>
                                     </div>
                                     <div className="picture">
-                                        <img src={value.image} className="image" ></img>
+                                        
+                                        <div className="box">
+                                            <Carousel useKeyboardArrows={true}>
+                                                <div>
+                                                    <img alt="" src={value.image} />
+                                                    <p className="legend">Legend 1</p>
+                                                </div>
+                                                <div>
+                                                    <img alt="" src={value.image} />
+                                                    <p className="legend">Legend 1</p>
+                                                </div>
+                                            </Carousel>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="column">
